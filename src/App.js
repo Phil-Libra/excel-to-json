@@ -62,8 +62,9 @@ function App() {
 
   // 添加下载链接函数
   const addLink = (data, file) => {
+    const fileField = document.getElementById('file');
     // 如已有生成的下载链接，则先删除
-    const prevLink = document.querySelector('a');
+    const prevLink = fileField.querySelector('a');
     if (prevLink) {
       prevLink.parentNode.removeChild(prevLink);
     }
@@ -80,7 +81,7 @@ function App() {
     link.href = URL.createObjectURL(blob);
     link.download = `${fileName}.json`;
     link.innerText = '下载JSON';
-    document.body.prepend(link);
+    fileField.prepend(link);
   };
 
   const handleUpload = async (e) => {
@@ -113,27 +114,30 @@ function App() {
         <legend>上传表格说明</legend>
         <p>暂时仅支持如下格式表格上传，否则转换出的数据可能有bug。</p>
         <table>
-          <th></th>
-          <tr key="1">
-            <td>JSON key1</td>
-            <td>JSON key2</td>
-            <td>JSON key3</td>
-            <td>JSON key4</td>
-            <td>JSON key5</td>
-          </tr>
-          <tr key="2">
-            <td>JSON value1</td>
-            <td>JSON value2</td>
-            <td>JSON value3</td>
-            <td>JSON value4</td>
-            <td>JSON value5</td>
-          </tr>
+          <tbody>
+            <tr key="1">
+              <td>JSON key1</td>
+              <td>JSON key2</td>
+              <td>JSON key3</td>
+              <td>JSON key4</td>
+              <td>JSON key5</td>
+            </tr>
+            <tr key="2">
+              <td>JSON value1</td>
+              <td>JSON value2</td>
+              <td>JSON value3</td>
+              <td>JSON value4</td>
+              <td>JSON value5</td>
+            </tr>
+          </tbody>
         </table>
       </fieldset>
-      <fieldset>
+      <fieldset id='file'>
         <legend>上传文件</legend>
-        <input type="file" name="excel-file" id="excel-file" onChange={handleUpload} />
-        <button onClick={generateJSON}>生成JSON</button>
+        <div className={styles.inputBox}>
+          <input type="file" name="excel-file" id="excel-file" onChange={handleUpload} />
+          <button onClick={generateJSON}>生成JSON</button>
+        </div>
       </fieldset>
 
       {
