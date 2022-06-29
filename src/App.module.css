@@ -1,0 +1,26 @@
+:global * {
+  margin: 0;
+  padding: 0;
+}
+:global table {
+  margin-top: 25px;
+  border-spacing: 0;
+}
+:global table tr {
+  text-align: center;
+}
+:global table tr:last-child td {
+  border-bottom: 1px solid #000;
+}
+:global table tr td {
+  padding: 10px;
+  border-left: 1px solid #000;
+  border-top: 1px solid #000;
+}
+:global table tr td:last-child {
+  border-right: 1px solid #000;
+}
+:global fieldset {
+  margin: 25px;
+  padding: 25px;
+}
