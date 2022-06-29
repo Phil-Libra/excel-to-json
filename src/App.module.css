@@ -24,6 +24,6 @@
   margin: 25px;
   padding: 25px;
 }
-.inputBox {
-  margin-top: 25px;
+:global button {
+  margin-right: 25px;
 }

@@ -81,7 +81,7 @@ function App() {
     link.href = URL.createObjectURL(blob);
     link.download = `${fileName}.json`;
     link.innerText = '下载JSON';
-    fileField.prepend(link);
+    fileField.append(link);
   };
 
   const handleUpload = async (e) => {
@@ -134,10 +134,8 @@ function App() {
       </fieldset>
       <fieldset id='file'>
         <legend>上传文件</legend>
-        <div className={styles.inputBox}>
-          <input type="file" name="excel-file" id="excel-file" onChange={handleUpload} />
-          <button onClick={generateJSON}>生成JSON</button>
-        </div>
+        <input type="file" name="excel-file" id="excel-file" onChange={handleUpload} />
+        <button onClick={generateJSON}>生成JSON</button>
       </fieldset>
 
       {
