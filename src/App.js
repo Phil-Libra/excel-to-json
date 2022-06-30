@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import styles from './App.module.css';
 
+const XLSX = window.XLSX;
+
 function App() {
   // 上传的文件
   const [file, setFile] = useState(new ArrayBuffer());
@@ -18,10 +20,10 @@ function App() {
   const excelToTable = async (file, sheet) => {
     const table = await file.arrayBuffer();
 
-    const wb = window.XLSX.read(table);
+    const wb = XLSX.read(table);
     const ws = wb.Sheets[sheet];
 
-    setHTML(window.XLSX.utils.sheet_to_html(ws));
+    setHTML(XLSX.utils.sheet_to_html(ws));
   };
 
   // excel转换为JSON函数
@@ -33,7 +35,7 @@ function App() {
         const { result } = e.target;
 
         // 以二进制流方式读取得到整份excel表格对象
-        const workbook = window.XLSX.read(result, { type: 'binary' });
+        const workbook = XLSX.read(result, { type: 'binary' });
 
         // 存储获取到的数据
         let data = {};
@@ -44,13 +46,14 @@ function App() {
 
           if (workbook.Sheets.hasOwnProperty(sheet)) {
             // 利用 sheet_to_json 方法将 excel 转成 json 数据
-            data[sheet] = tempData.concat(window.XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
-
-            //设置表格数据state
-            setJSONData(data);
+            data[sheet] = tempData.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
           }
         }
+
+        //将处理好的数据赋值给state
+        setJSONData(data);
       } catch (e) {
+        console.log(e);
         alert('文件类型不正确');
         return;
       };
@@ -63,6 +66,7 @@ function App() {
   // 添加下载链接函数
   const addLink = (data, file) => {
     const fileField = document.getElementById('file');
+
     // 如已有生成的下载链接，则先删除
     const prevLink = fileField.querySelector('a');
     if (prevLink) {
@@ -70,8 +74,10 @@ function App() {
     }
 
     // 根据上传的文件名自动生成JSON名称
-    const fileNameArray = file.name.split('.');
-    const fileName = fileNameArray.slice(0, fileNameArray.length - 1).join('.');
+    let fileNameArray = file.name.split('.');
+    let fileName = fileNameArray.slice(0, fileNameArray.length - 1);
+    fileName.push(defSheet);
+    fileName = fileName.join('.');
 
     // 根据文件生成下载的数据
     const blob = new Blob([JSON.stringify(data)]);
@@ -85,13 +91,13 @@ function App() {
   };
 
   const handleUpload = async (e) => {
-    // 获取文件并更新到state
+    // 获取文件并赋值给state
     const files = e.target.files;
     setFile(files[0]);
 
     // 获取当前表格sheet列表
     const table = await files[0].arrayBuffer();
-    const wb = window.XLSX.read(table);
+    const wb = XLSX.read(table);
     setSheets(wb.SheetNames);
 
     // 生成表格预览
@@ -111,8 +117,13 @@ function App() {
   return (
     <>
       <fieldset>
-        <legend>上传表格说明</legend>
-        <p>暂时仅支持如下格式表格上传，否则转换出的数据可能有bug。</p>
+        <legend>说明</legend>
+        <a href="https://github.com/Phil-Libra/excel-to-json">源代码</a>
+        <p>仅支持Excel工作表上传，部分其他文件能够上传但转换数据存在Bug。</p>
+        <br />
+        <p>生成的文件名格式：源文件名.选择的Sheet.json</p>
+        <br />
+        <p>暂时仅支持如下格式表格转换，否则转换出的数据可能有bug：</p>
         <table>
           <tbody>
             <tr key="1">
@@ -123,32 +134,32 @@ function App() {
               <td>JSON key5</td>
             </tr>
             <tr key="2">
-              <td>JSON key1 value</td>
-              <td>JSON key2 value</td>
-              <td>JSON key3 value</td>
-              <td>JSON key4 value</td>
-              <td>JSON key5 value</td>
+              <td>key1 value</td>
+              <td>key2 value</td>
+              <td>key3 value</td>
+              <td>key4 value</td>
+              <td>key5 value</td>
             </tr>
             <tr key="3">
-              <td>JSON key1 value</td>
-              <td>JSON key2 value</td>
-              <td>JSON key3 value</td>
-              <td>JSON key4 value</td>
-              <td>JSON key5 value</td>
+              <td>key1 value</td>
+              <td>key2 value</td>
+              <td>key3 value</td>
+              <td>key4 value</td>
+              <td>key5 value</td>
             </tr>
             <tr key="4">
-              <td>JSON key1 value</td>
-              <td>JSON key2 value</td>
-              <td>JSON key3 value</td>
-              <td>JSON key4 value</td>
-              <td>JSON key5 value</td>
+              <td>key1 value</td>
+              <td>key2 value</td>
+              <td>key3 value</td>
+              <td>key4 value</td>
+              <td>key5 value</td>
             </tr>
             <tr key="5">
-              <td>JSON key1 value</td>
-              <td>JSON key2 value</td>
-              <td>JSON key3 value</td>
-              <td>JSON key4 value</td>
-              <td>JSON key5 value</td>
+              <td>key1 value</td>
+              <td>key2 value</td>
+              <td>key3 value</td>
+              <td>key4 value</td>
+              <td>key5 value</td>
             </tr>
           </tbody>
         </table>
@@ -159,36 +170,37 @@ function App() {
         <button onClick={generateJSON}>生成JSON</button>
       </fieldset>
 
-      {
-        sheets.length > 0
-          ? (
-            <fieldset>
-              <legend>表格数据预览</legend>
+      <fieldset>
+        <legend>表格数据预览</legend>
+        {
+          sheets.length > 0
+            ? (
+              <>
+                选择工作表：
+                <select
+                  id='sheets'
+                  value={defSheet}
+                  onChange={(e) => {
+                    excelToTable(file, e.target.value);
+                    setDefSheet(e.target.value)
+                  }}
+                >
+                  {
+                    sheets.map((item, index) => (
+                      <option value={item} key={index}>{item}</option>
+                    ))
+                  }
+                </select>
 
-              选择工作表：
-              <select
-                id='sheets'
-                value={defSheet}
-                onChange={(e) => {
-                  excelToTable(file, e.target.value);
-                  setDefSheet(e.target.value)
-                }}
-              >
-                {
-                  sheets.map((item, index) => (
-                    <option value={item} key={index}>{item}</option>
-                  ))
-                }
-              </select>
-
-              <div
-                className={styles.tablePreview}
-                dangerouslySetInnerHTML={{ __html: html }}
-              />
-            </fieldset>
-          )
-          : (<></>)
-      }
+                <div
+                  className={styles.tablePreview}
+                  dangerouslySetInnerHTML={{ __html: html }}
+                />
+              </>
+            )
+            : (<></>)
+        }
+      </fieldset>
     </>
   )
 };
