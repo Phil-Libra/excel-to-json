@@ -15,8 +15,8 @@ function App() {
   const [defSheet, setDefSheet] = useState('');
   // 转换出来的JSON数据
   const [JSONData, setJSONData] = useState({});
-
-  const [addSheetName, setAddSheetName] = useState(true);
+  // 是否把工作表名称加入文件名
+  const [addSheetName, setAddSheetName] = useState(false);
 
   // excel转换为网页表格函数
   const excelToTable = async (file, sheet) => {
@@ -99,6 +99,15 @@ function App() {
   const handleUpload = async (e) => {
     // 获取文件并赋值给state
     const files = e.target.files;
+
+    // 判定是否有文件上传及文件格式是否正确
+    if (files.length === 0) {
+      return;
+    } else if (files.length !== 0 && !fileType.includes(files[0].type)) {
+      alert('文件格式错误');
+      return;
+    }
+
     setFile(files[0]);
 
     // 获取当前表格sheet列表
@@ -125,9 +134,9 @@ function App() {
       <fieldset>
         <legend>说明</legend>
         <a href="https://github.com/Phil-Libra/excel-to-json">源代码</a>
-        <p>仅支持Excel工作表上传，部分其他文件能够上传但转换数据存在Bug。</p>
+        <p>生成的文件名格式：源文件名.选择的工作表名(可选).json</p>
         <br />
-        <p>生成的文件名格式：源文件名.选择的Sheet.json</p>
+        <p>仅支持工作表文件上传（含Excel及OpenDocument），其他文件转换会存在Bug。</p>
         <br />
         <p>暂时仅支持如下格式表格转换，否则转换出的数据可能有bug：</p>
         <table>
@@ -173,7 +182,7 @@ function App() {
       <fieldset id='file'>
         <legend>上传文件</legend>
         <input type="file" name="excel-file" id="excel-file" onChange={handleUpload} />
-        <input type="checkbox" defaultChecked onChange={() => setAddSheetName((prevState) => !prevState)} />把工作表名称加入文件名
+        <input type="checkbox" onChange={() => setAddSheetName((prevState) => !prevState)} />把工作表名称加入文件名
         <button onClick={generateJSON}>生成JSON</button>
       </fieldset>
 
@@ -213,3 +222,14 @@ function App() {
 };
 
 export default App;
+
+const fileType = [
+  'application/vnd.ms-excel',
+  'application/vnd.ms-excel.addin.macroEnabled.12',
+  'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+  'application/vnd.ms-excel.sheet.macroEnabled.12',
+  'application/vnd.ms-excel.template.macroEnabled.12',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+  'application/vnd.oasis.opendocument.spreadsheet'
+];

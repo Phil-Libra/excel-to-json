@@ -27,3 +27,6 @@
 :global button {
   margin: 0 25px;
 }
+:global input {
+  margin-right: 5px;
+}
