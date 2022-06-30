@@ -25,5 +25,5 @@
   padding: 25px;
 }
 :global button {
-  margin-right: 25px;
+  margin: 0 25px;
 }

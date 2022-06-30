@@ -16,6 +16,8 @@ function App() {
   // 转换出来的JSON数据
   const [JSONData, setJSONData] = useState({});
 
+  const [addSheetName, setAddSheetName] = useState(true);
+
   // excel转换为网页表格函数
   const excelToTable = async (file, sheet) => {
     const table = await file.arrayBuffer();
@@ -76,7 +78,11 @@ function App() {
     // 根据上传的文件名自动生成JSON名称
     let fileNameArray = file.name.split('.');
     let fileName = fileNameArray.slice(0, fileNameArray.length - 1);
-    fileName.push(defSheet);
+
+    if (addSheetName) {
+      fileName.push(defSheet);
+    }
+
     fileName = fileName.join('.');
 
     // 根据文件生成下载的数据
@@ -167,6 +173,7 @@ function App() {
       <fieldset id='file'>
         <legend>上传文件</legend>
         <input type="file" name="excel-file" id="excel-file" onChange={handleUpload} />
+        <input type="checkbox" defaultChecked onChange={() => setAddSheetName((prevState) => !prevState)} />把工作表名称加入文件名
         <button onClick={generateJSON}>生成JSON</button>
       </fieldset>
 
