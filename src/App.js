@@ -52,6 +52,7 @@ function App() {
           }
         }
 
+        console.log(data);
         //将处理好的数据赋值给state
         setJSONData(data);
       } catch (e) {
@@ -86,7 +87,7 @@ function App() {
     fileName = fileName.join('.');
 
     // 根据文件生成下载的数据
-    const blob = new Blob([JSON.stringify(data)]);
+    const blob = new Blob([JSON.stringify(data, null, 2)]);
 
     // 生成下载链接并插入网页
     const link = document.createElement('a');
@@ -179,6 +180,7 @@ function App() {
           </tbody>
         </table>
       </fieldset>
+
       <fieldset id='file'>
         <legend>上传文件</legend>
         <input type="file" name="excel-file" id="excel-file" onChange={handleUpload} />
