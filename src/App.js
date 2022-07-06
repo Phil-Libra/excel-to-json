@@ -40,11 +40,11 @@ function App() {
         const workbook = XLSX.read(result, { type: 'binary' });
 
         // 存储获取到的数据
-        let data = {};
+        const data = {};
 
         // 遍历每张工作表进行读取
         for (const sheet in workbook.Sheets) {
-          let tempData = [];
+          const tempData = [];
 
           if (workbook.Sheets.hasOwnProperty(sheet)) {
             // 利用 sheet_to_json 方法将 excel 转成 json 数据
@@ -52,7 +52,6 @@ function App() {
           }
         }
 
-        console.log(data);
         //将处理好的数据赋值给state
         setJSONData(data);
       } catch (e) {
@@ -77,7 +76,7 @@ function App() {
     }
 
     // 根据上传的文件名自动生成JSON名称
-    let fileNameArray = file.name.split('.');
+    const fileNameArray = file.name.split('.');
     let fileName = fileNameArray.slice(0, fileNameArray.length - 1);
 
     if (addSheetName) {
@@ -134,7 +133,8 @@ function App() {
     <>
       <fieldset>
         <legend>说明</legend>
-        <a href="https://github.com/Phil-Libra/excel-to-json">源代码</a>
+        <p><a href="https://github.com/Phil-Libra/excel-to-json">源代码</a></p>
+        <br />
         <p>生成的文件名格式：源文件名.选择的工作表名(可选).json</p>
         <br />
         <p>仅支持工作表文件上传（含Excel及OpenDocument），其他文件转换会存在Bug。</p>
