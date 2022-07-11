@@ -188,9 +188,27 @@ function App() {
 
       <fieldset id='file'>
         <legend>上传文件</legend>
-        <input type="file" name="excel-file" id="excel-file" onChange={handleUpload} />
-        <input type="checkbox" onChange={() => setAddSheetName((prevState) => !prevState)} />把工作表名称加入文件名
-        <button onClick={generateJSON}>生成JSON</button>
+        <div>
+          <label htmlFor="excel-file">
+            <input
+              type="file"
+              name="excel-file"
+              id="excel-file"
+              onChange={handleUpload}
+            />
+          </label>
+        </div>
+        <div>
+          <label htmlFor="addSheet">
+            <input
+              type="checkbox"
+              id="addSheet"
+              onChange={() => setAddSheetName((prevState) => !prevState)}
+            />
+            把工作表名称加入文件名
+          </label>
+          <button onClick={generateJSON}>生成JSON</button>
+        </div>
       </fieldset>
 
       <fieldset>

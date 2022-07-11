@@ -24,10 +24,51 @@
   margin: 25px;
   padding: 25px;
 }
-:global button {
-  margin: 0 25px;
+:global #file {
+  display: flex;
+}
+:global #file input {
+  margin-right: 5px;
+}
+:global #file button {
   padding: 0 5px;
 }
-:global input {
-  margin-right: 5px;
+@media (min-width: 658px) {
+  :global #file {
+    flex-direction: row;
+    align-items: center;
+  }
+  :global #file button {
+    margin-left: 25px;
+  }
+  :global #file a {
+    margin-left: 10px;
+  }
+}
+@media (max-width: 657px) and (min-width: 425px) {
+  :global #file {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  :global #file button {
+    margin: 25px;
+  }
+  :global #file a {
+    margin: 0;
+  }
+}
+@media (max-width: 424px) {
+  :global #file {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  :global #file #addSheet {
+    margin: 25px 5px 25px 0;
+  }
+  :global #file button {
+    display: block;
+  }
+  :global #file a {
+    margin-top: 10px;
+  }
 }

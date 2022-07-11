@@ -34,12 +34,64 @@
         padding: 25px;
     }
 
-    button {
-        margin: 0 25px;
-        padding: 0 5px;
+    #file {
+        display: flex;
+
+        input {
+            margin-right: 5px;
+        }
+
+        button {
+            padding: 0 5px;
+        }
     }
 
-    input {
-        margin-right: 5px;
+    @media (min-width:658px) {
+        #file {
+            flex-direction: row;
+            align-items: center;
+
+            button {
+                margin-left: 25px;
+            }
+
+            a {
+                margin-left: 10px;
+            }
+        }
+    }
+
+    @media (max-width:657px)and(min-width:425px) {
+        #file {
+            flex-direction: column;
+            align-items: flex-start;
+
+            button {
+                margin: 25px;
+            }
+
+            a {
+                margin: 0;
+            }
+        }
+    }
+
+    @media (max-width:424px) {
+        #file {
+            flex-direction: column;
+            align-items: flex-start;
+
+            #addSheet {
+                margin: 25px 5px 25px 0;
+            }
+
+            button {
+                display: block;
+            }
+
+            a {
+                margin-top: 10px;
+            }
+        }
     }
 }
