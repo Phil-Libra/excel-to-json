@@ -52,6 +52,8 @@ function App() {
           }
         }
 
+        console.log(data);
+
         //将处理好的数据赋值给state
         setJSONData(data);
       } catch (e) {
@@ -71,6 +73,7 @@ function App() {
 
     // 如已有生成的下载链接，则先删除
     const prevLink = fileField.querySelector('a');
+
     if (prevLink) {
       prevLink.parentNode.removeChild(prevLink);
     }
@@ -138,6 +141,8 @@ function App() {
         <p>生成的文件名格式：源文件名.选择的工作表名(可选).json</p>
         <br />
         <p>仅支持工作表文件上传（含Excel及OpenDocument），其他文件转换会存在Bug。</p>
+        <br />
+        <p><strong>没有任何值的行、列虽然在预览中能看到，但在转换时会被忽略。</strong></p>
         <br />
         <p>暂时仅支持如下格式表格转换，否则转换出的数据可能有bug：</p>
         <table>
