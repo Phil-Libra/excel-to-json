@@ -52,8 +52,6 @@ function App() {
           }
         }
 
-        console.log(data);
-
         //将处理好的数据赋值给state
         setJSONData(data);
       } catch (e) {
@@ -64,7 +62,7 @@ function App() {
     };
 
     // 以二进制方式打开文件
-    fileReader.readAsBinaryString(file);
+    fileReader.readAsArrayBuffer(file);
   };
 
   // 添加下载链接函数
