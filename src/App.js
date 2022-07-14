@@ -128,7 +128,7 @@ function App() {
   const generateJSON = () => {
     // 添加下载链接
     addLink(JSONData[defSheet], file);
-  }
+  };
 
   return (
     <>
