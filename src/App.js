@@ -67,8 +67,20 @@ function App() {
 
   // 添加下载链接函数
   const addLink = (data, file) => {
+    // 考虑未选中任何文件的情况
+    if (!file.name) {
+      return;
+    }
+
     // 根据上传的文件名自动生成JSON名称
     const fileNameArray = file.name.split('.');
+
+    // 如果上传的文件只有扩展名，则加入默认的文件名'json'
+    if (!fileNameArray[0]) {
+      fileNameArray.shift();
+      fileNameArray.unshift('json');
+    }
+
     let fileName = fileNameArray.slice(0, fileNameArray.length - 1);
 
     if (addSheetName) {
