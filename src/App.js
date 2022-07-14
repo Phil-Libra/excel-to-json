@@ -17,6 +17,8 @@ function App() {
   const [JSONData, setJSONData] = useState({});
   // 是否把工作表名称加入文件名
   const [addSheetName, setAddSheetName] = useState(false);
+  // 设定下载按钮显示状态
+  const [dlStatus, setDLStatus] = useState(false);
 
   // excel转换为网页表格函数
   const excelToTable = async (file, sheet) => {
@@ -66,7 +68,7 @@ function App() {
   };
 
   // 添加下载链接函数
-  const addLink = (data, file) => {
+  const generateJSON = (data, file) => {
     // 考虑未选中任何文件的情况
     if (!file.name) {
       return;
@@ -125,11 +127,14 @@ function App() {
 
     // 将表格转换为JSON数据
     excelToJSON(files[0]);
+
+    // 显示下载按钮
+    setDLStatus(true);
   };
 
-  const generateJSON = () => {
+  const getJSON = () => {
     // 添加下载链接
-    addLink(JSONData[defSheet], file);
+    generateJSON(JSONData[defSheet], file);
   };
 
   return (
@@ -198,7 +203,7 @@ function App() {
             />
           </label>
         </div>
-        <div>
+        <div style={{ display: dlStatus ? '' : 'none' }}>
           <label htmlFor="addSheet">
             <input
               type="checkbox"
@@ -207,7 +212,7 @@ function App() {
             />
             把工作表名称加入文件名
           </label>
-          <button onClick={generateJSON}>下载JSON</button>
+          <button onClick={getJSON}>下载JSON</button>
         </div>
       </fieldset>
 
