@@ -67,15 +67,6 @@ function App() {
 
   // 添加下载链接函数
   const addLink = (data, file) => {
-    const fileField = document.getElementById('file');
-
-    // 如已有生成的下载链接，则先删除
-    const prevLink = fileField.querySelector('a');
-
-    if (prevLink) {
-      prevLink.parentNode.removeChild(prevLink);
-    }
-
     // 根据上传的文件名自动生成JSON名称
     const fileNameArray = file.name.split('.');
     let fileName = fileNameArray.slice(0, fileNameArray.length - 1);
@@ -93,8 +84,7 @@ function App() {
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `${fileName}.json`;
-    link.innerText = '下载JSON';
-    fileField.append(link);
+    link.click();
   };
 
   const handleUpload = async (e) => {
@@ -205,7 +195,7 @@ function App() {
             />
             把工作表名称加入文件名
           </label>
-          <button onClick={generateJSON}>生成JSON</button>
+          <button onClick={generateJSON}>下载JSON</button>
         </div>
       </fieldset>
 
