@@ -6,15 +6,13 @@ const XLSX = window.XLSX;
 
 function App() {
   // 上传的文件
-  const [file, setFile] = useState(new ArrayBuffer());
+  const [file, setFile] = useState();
   // 要生成的网页表格内容
-  const [html, setHTML] = useState('');
+  const [html, setHTML] = useState();
   // 表格sheet列表
   const [sheets, setSheets] = useState([]);
   // 目标sheet
-  const [defSheet, setDefSheet] = useState('');
-  // 转换出来的JSON数据
-  const [JSONData, setJSONData] = useState({});
+  const [defSheet, setDefSheet] = useState();
   // 是否把工作表名称加入文件名
   const [addSheetName, setAddSheetName] = useState(false);
   // 设定下载按钮显示状态
@@ -31,7 +29,7 @@ function App() {
   };
 
   // excel转换为JSON函数
-  const excelToJSON = (file) => {
+  const excelToJSON = (file) => new Promise((resolve, reject) => {
     const fileReader = new FileReader();
 
     fileReader.onload = (e) => {
@@ -54,47 +52,39 @@ function App() {
           }
         }
 
-        //将处理好的数据赋值给state
-        setJSONData(data);
+        // 返回处理好的数据
+        resolve(data);
       } catch (e) {
-        console.log(e);
-        alert('文件类型不正确');
+        reject(e);
         return;
       };
     };
 
     // 以二进制方式打开文件
     fileReader.readAsArrayBuffer(file);
-  };
+  });
 
-  // 添加下载链接函数
+  // 生成并下载文件函数
   const generateJSON = (data, file) => {
-    // 考虑未选中任何文件的情况
-    if (!file.name) {
-      return;
-    }
-
     // 根据上传的文件名自动生成JSON名称
-    const fileNameArray = file.name.split('.');
+    let fileNameArray = file.name.split('.');
+    fileNameArray = fileNameArray.slice(0, fileNameArray.length - 1);
 
     // 如果上传的文件只有扩展名，则加入默认的文件名'json'
     if (!fileNameArray[0]) {
-      fileNameArray.shift();
-      fileNameArray.unshift('json');
+      fileNameArray.splice(0, 1, 'json');
     }
-
-    let fileName = fileNameArray.slice(0, fileNameArray.length - 1);
 
     if (addSheetName) {
-      fileName.push(defSheet);
+      fileNameArray.push(defSheet);
     }
 
-    fileName = fileName.join('.');
+    const fileName = fileNameArray.join('.');
 
     // 根据文件生成下载的数据
     const blob = new Blob([JSON.stringify(data, null, 2)]);
 
-    // 生成下载链接并插入网页
+    // 自动下载文件
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `${fileName}.json`;
@@ -113,27 +103,33 @@ function App() {
       return;
     }
 
+    // 在state中共享文件
     setFile(files[0]);
 
-    // 获取当前表格sheet列表
+    // 获取当前表格工作表列表
     const table = await files[0].arrayBuffer();
     const wb = XLSX.read(table);
     setSheets(wb.SheetNames);
 
-    // 生成表格预览
-    excelToTable(files[0], wb.SheetNames[0]);
-
+    // 设置工作表
     setDefSheet(wb.SheetNames[0]);
 
-    // 将表格转换为JSON数据
-    excelToJSON(files[0]);
+    // 生成表格预览
+    excelToTable(files[0], wb.SheetNames[0]);
 
     // 显示下载按钮
     setDLStatus(true);
   };
 
-  const getJSON = () => {
-    // 添加下载链接
+  const handleDownload = async () => {
+    // // 考虑未上传任何文件的情况
+    if (!file) {
+      return;
+    }
+
+    // // 将表格转换为JSON数据
+    const JSONData = await excelToJSON(file);
+    // // 生成文件并下载
     generateJSON(JSONData[defSheet], file);
   };
 
@@ -212,7 +208,7 @@ function App() {
             />
             把工作表名称加入文件名
           </label>
-          <button onClick={getJSON}>下载JSON</button>
+          <button onClick={handleDownload}>下载JSON</button>
         </div>
       </fieldset>
 
