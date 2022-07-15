@@ -41,9 +41,6 @@
   :global #file button {
     margin-left: 25px;
   }
-  :global #file a {
-    margin-left: 10px;
-  }
 }
 @media (max-width: 657px) and (min-width: 425px) {
   :global #file {
@@ -52,9 +49,6 @@
   }
   :global #file button {
     margin: 25px;
-  }
-  :global #file a {
-    margin: 0;
   }
 }
 @media (max-width: 424px) {
@@ -67,8 +61,5 @@
   }
   :global #file button {
     display: block;
-  }
-  :global #file a {
-    margin-top: 10px;
   }
 }
