@@ -111,7 +111,7 @@ function App() {
     const wb = XLSX.read(table);
     setSheets(wb.SheetNames);
 
-    // 设置工作表
+    // 设置文件默认工作表
     setDefSheet(wb.SheetNames[0]);
 
     // 生成表格预览
@@ -122,14 +122,15 @@ function App() {
   };
 
   const handleDownload = async () => {
-    // // 考虑未上传任何文件的情况
+    // 考虑未上传任何文件的情况
     if (!file) {
       return;
     }
 
-    // // 将表格转换为JSON数据
+    // 将表格转换为JSON数据
     const JSONData = await excelToJSON(file);
-    // // 生成文件并下载
+
+    // 生成文件并下载
     generateJSON(JSONData[defSheet], file);
   };
 
@@ -137,64 +138,65 @@ function App() {
     <>
       <fieldset>
         <legend>说明</legend>
-        <p><a href="https://github.com/Phil-Libra/excel-to-json">源代码</a></p>
-        <br />
-        <p>生成的文件名格式：源文件名.选择的工作表名(可选).json</p>
-        <br />
-        <p>仅支持工作表文件上传（含Excel及OpenDocument），其他文件转换会存在Bug。</p>
-        <br />
-        <p><strong>没有任何值的行、列虽然在预览中能看到，但在转换时会被忽略。</strong></p>
-        <br />
-        <p>暂时仅支持如下格式表格转换，否则转换出的数据可能有bug：</p>
-        <table>
-          <tbody>
-            <tr key="1">
-              <td>JSON key1</td>
-              <td>JSON key2</td>
-              <td>JSON key3</td>
-              <td>JSON key4</td>
-              <td>JSON key5</td>
-            </tr>
-            <tr key="2">
-              <td>key1 value</td>
-              <td>key2 value</td>
-              <td>key3 value</td>
-              <td>key4 value</td>
-              <td>key5 value</td>
-            </tr>
-            <tr key="3">
-              <td>key1 value</td>
-              <td>key2 value</td>
-              <td>key3 value</td>
-              <td>key4 value</td>
-              <td>key5 value</td>
-            </tr>
-            <tr key="4">
-              <td>key1 value</td>
-              <td>key2 value</td>
-              <td>key3 value</td>
-              <td>key4 value</td>
-              <td>key5 value</td>
-            </tr>
-            <tr key="5">
-              <td>key1 value</td>
-              <td>key2 value</td>
-              <td>key3 value</td>
-              <td>key4 value</td>
-              <td>key5 value</td>
-            </tr>
-          </tbody>
-        </table>
+        <ul>
+          <li><a href="https://github.com/Phil-Libra/excel-to-json">源代码</a></li>
+          <li>生成的文件名格式：源文件名.选择的工作表名(可选).json</li>
+          <li>仅支持工作表文件上传（含Excel及OpenDocument），其他文件转换会存在Bug。</li>
+          <li><strong>没有任何值的行、列虽然在预览中能看到，但在转换时会被忽略。</strong></li>
+          <li><strong>因{'<input />'}标签本身限制，连续上传同一个文件请刷新页面后再上传。</strong></li>
+          <li>暂时仅支持如下格式表格转换，否则转换出的数据可能有bug：</li>
+          <li>
+            <table>
+              <tbody>
+                <tr key="1">
+                  <td>JSON key1</td>
+                  <td>JSON key2</td>
+                  <td>JSON key3</td>
+                  <td>JSON key4</td>
+                  <td>JSON key5</td>
+                </tr>
+                <tr key="2">
+                  <td>key1 value</td>
+                  <td>key2 value</td>
+                  <td>key3 value</td>
+                  <td>key4 value</td>
+                  <td>key5 value</td>
+                </tr>
+                <tr key="3">
+                  <td>key1 value</td>
+                  <td>key2 value</td>
+                  <td>key3 value</td>
+                  <td>key4 value</td>
+                  <td>key5 value</td>
+                </tr>
+                <tr key="4">
+                  <td>key1 value</td>
+                  <td>key2 value</td>
+                  <td>key3 value</td>
+                  <td>key4 value</td>
+                  <td>key5 value</td>
+                </tr>
+                <tr key="5">
+                  <td>key1 value</td>
+                  <td>key2 value</td>
+                  <td>key3 value</td>
+                  <td>key4 value</td>
+                  <td>key5 value</td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+        </ul>
       </fieldset>
 
       <fieldset id='file'>
         <legend>上传文件</legend>
         <div>
-          <label htmlFor="excel-file">
+          <label htmlFor="upload">
             <input
               type="file"
-              name="excel-file"
-              id="excel-file"
+              name="upload"
+              id="upload"
               onChange={handleUpload}
             />
           </label>

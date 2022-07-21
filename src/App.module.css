@@ -24,6 +24,13 @@
   margin: 25px;
   padding: 25px;
 }
+:global li {
+  list-style: none;
+  margin-bottom: 1em;
+}
+:global li:last-child {
+  margin-bottom: 0;
+}
 :global #file {
   display: flex;
 }
@@ -31,7 +38,7 @@
   margin-right: 5px;
 }
 :global #file button {
-  padding: 0 5px;
+  padding: 1px 5px;
 }
 @media (min-width: 658px) {
   :global #file {

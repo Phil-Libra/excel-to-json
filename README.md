@@ -5,4 +5,4 @@
 
 使用[sheetjs](https://github.com/SheetJS/sheetjs)工具实现。
 
-限制和 bug 还比较多，UI 也未美化，待完善。
+限制和 bug 还比较多，待完善。
