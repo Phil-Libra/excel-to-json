@@ -60,6 +60,7 @@ function App() {
                     item[k] = false;
                     break;
                   default:
+                    break;
                 }
               }
 
