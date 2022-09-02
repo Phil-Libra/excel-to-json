@@ -47,28 +47,8 @@ function App() {
           const tempData = [];
 
           if (workbook.Sheets.hasOwnProperty(sheet)) {
-            // 处理值为布尔值的数据
-            const rawData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-
-            rawData.map((item) => {
-              for (const k in item) {
-                switch (item[k]) {
-                  case 'true':
-                    item[k] = true;
-                    break;
-                  case 'false':
-                    item[k] = false;
-                    break;
-                  default:
-                    break;
-                }
-              }
-
-              return item;
-            });
-
             // 利用 sheet_to_json 方法将 excel 转成 json 数据
-            data[sheet] = tempData.concat(rawData);
+            data[sheet] = tempData.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
           }
         }
 
